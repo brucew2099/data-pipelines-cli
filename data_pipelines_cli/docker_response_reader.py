@@ -118,7 +118,8 @@ class DockerResponseReader:
         error_message = error_detail.get("message", "")
         error_code = error_detail.get("code", None)
         return DockerReadResponse(
-            "ERROR: " + error_message + (f"\nError code: {error_code}" if error_code else ""),
+            f"ERROR: {error_message}"
+            + (f"\nError code: {error_code}" if error_code else ""),
             True,
         )
 

@@ -60,7 +60,7 @@ def _generate_model_yamls_for_directory(
     click.echo(f"Generating schema file for directory: {str(directory)}")
     with open(pathlib.Path.cwd().joinpath("target", "manifest.json"), "r") as manifest_json:
         manifest = json.load(manifest_json)
-    models = [
+    if models := [
         model
         for file in directory.glob("*.sql")
         if not _is_ephemeral_model(manifest, file.stem)
@@ -70,12 +70,7 @@ def _generate_model_yamls_for_directory(
             {macro_arg_name["arg_name"]: file.stem},
             profiles_path,
         )["models"]
-    ]
-    if len(models) == 0:
-        echo_warning(
-            f"{str(directory)} does not have any models. Schema file will not be generated."
-        )
-    else:
+    ]:
         with open(output_path, "w") as output_file:
             yaml.dump(
                 {"version": 2, "models": models},
@@ -84,6 +79,10 @@ def _generate_model_yamls_for_directory(
                 sort_keys=False,
             )
         echo_info(f"Generated source schema file and saved in {output_path}")
+    else:
+        echo_warning(
+            f"{str(directory)} does not have any models. Schema file will not be generated."
+        )
 
 
 def generate_model_yamls(

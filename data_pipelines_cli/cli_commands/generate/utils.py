@@ -39,15 +39,15 @@ def get_output_file_or_warn_if_exists(
 ) -> Optional[pathlib.Path]:
     output_path = directory.joinpath(f"{filename or directory.name}.{file_extension}")
     if output_path.exists():
-        if not overwrite:
+        if overwrite:
+            echo_warning(
+                f"{str(output_path)} in directory {str(directory)} exists, it gets overwritten."
+            )
+        else:
             echo_warning(
                 f"{str(output_path)} in directory {str(directory)} exists, it "
                 "will not be overwritten. If you want to overwrite it, pass "
                 "'--overwrite' flag."
             )
             return None
-        else:
-            echo_warning(
-                f"{str(output_path)} in directory {str(directory)} exists, it gets overwritten."
-            )
     return output_path
