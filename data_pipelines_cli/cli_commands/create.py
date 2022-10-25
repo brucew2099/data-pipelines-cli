@@ -14,7 +14,7 @@ def _choose_template(config_templates: Dict[str, TemplateConfig]) -> TemplateCon
     """
     :raises DataPipelinesError: no template found in *config_templates*
     """
-    if len(config_templates) == 0:
+    if not config_templates:
         raise DataPipelinesError(
             "No template provided. Either run 'dp create <project_path> "
             "<link_to_template>' to use template from the link, or add template "
@@ -22,9 +22,7 @@ def _choose_template(config_templates: Dict[str, TemplateConfig]) -> TemplateCon
         )
 
     template_name = questionary.select("", choices=list(config_templates.keys())).ask()
-    template_config = config_templates[template_name]
-
-    return template_config
+    return config_templates[template_name]
 
 
 def _get_template_path(
@@ -32,13 +30,14 @@ def _get_template_path(
 ) -> str:
     """:raises DataPipelinesError: no template found in *config_templates*"""
     if template_path:
-        if template_path in config_templates.keys():
-            to_return = config_templates[template_path]["template_path"]
-        else:
-            to_return = add_suffix_to_git_template_path(template_path)
+        return (
+            config_templates[template_path]["template_path"]
+            if template_path in config_templates
+            else add_suffix_to_git_template_path(template_path)
+        )
+
     else:
-        to_return = _choose_template(config_templates)["template_path"]
-    return to_return
+        return _choose_template(config_templates)["template_path"]
 
 
 def create(project_path: str, template_path: Optional[str]) -> None:

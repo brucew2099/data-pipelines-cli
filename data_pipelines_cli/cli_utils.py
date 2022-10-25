@@ -87,14 +87,14 @@ def get_argument_or_environment_variable(
     :raises DataPipelinesError: *argument* is ``None`` and \
         *environment_variable_name* is not set
     """
-    result = argument or os.environ.get(environment_variable_name)
-    if not result:
+    if result := argument or os.environ.get(environment_variable_name):
+        return result
+    else:
         raise DataPipelinesError(
             f"Could not get {environment_variable_name}. Either set it as an "
             f"environment variable {environment_variable_name} or pass as a "
             f"`--{argument_name}` CLI argument."
         )
-    return result
 
 
 def subprocess_run(

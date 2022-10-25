@@ -35,11 +35,13 @@ class CliUtilsTest(unittest.TestCase):
 
         for echo_fun, is_stdout in self.echo_is_printing_to_out:
             with self.subTest(function=echo_fun.__name__), patch(
-                "sys.stdout", new=StringIO()
-            ) as fake_out, patch("sys.stderr", new=StringIO()) as fake_err:
+                        "sys.stdout", new=StringIO()
+                    ) as fake_out, patch("sys.stderr", new=StringIO()) as fake_err:
                 echo_fun(test_string)
                 self.assertEqual(endlined_test_string if is_stdout else "", fake_out.getvalue())
-                self.assertEqual(endlined_test_string if not is_stdout else "", fake_err.getvalue())
+                self.assertEqual(
+                    "" if is_stdout else endlined_test_string, fake_err.getvalue()
+                )
 
     some_env_variable_key = "SOME_VARIABLE"
     some_env_variable_value = "some_value"

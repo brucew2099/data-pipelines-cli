@@ -119,7 +119,7 @@ def _copy_all_files_by_extention(
     src: pathlib.Path, dest: pathlib.Path, files_extention: str
 ) -> None:
     os.makedirs(dest, exist_ok=True)
-    for file_path in glob.glob(os.path.join(src, "**", "*." + files_extention), recursive=True):
+    for file_path in glob.glob(os.path.join(src, "**", f"*.{files_extention}"), recursive=True):
         file_path_with_dp_ext = "{0}.dp.{1}.{2}".format(*file_path.rsplit(".", 2))
         new_path = os.path.join(dest, os.path.basename(file_path_with_dp_ext))
         copy(file_path, new_path)

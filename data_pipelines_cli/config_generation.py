@@ -76,7 +76,7 @@ def _read_env_config(
     config_file_path = pathlib.Path(config_path).joinpath("config", env, file_name)
     if config_file_path.exists():
         return _read_yaml_file(config_file_path)
-    echo_warning("Missing config file: " + str(config_file_path))
+    echo_warning(f"Missing config file: {str(config_file_path)}")
     return {}
 
 
